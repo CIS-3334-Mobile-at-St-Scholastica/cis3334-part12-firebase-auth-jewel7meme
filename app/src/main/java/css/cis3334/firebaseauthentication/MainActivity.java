@@ -53,28 +53,28 @@ public class MainActivity extends AppCompatActivity {
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("CIS3334", "normal login ");
+                //Log.d("CIS3334", "normal login ");
                 signIn(editTextEmail.getText().toString(), editTextPassword.getText().toString());
             }
         });
 
         buttonCreateLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("CIS3334", "Create Account ");
+                //Log.d("CIS3334", "Create Account ");
                 createAccount(editTextEmail.getText().toString(), editTextPassword.getText().toString());
             }
         });
 
         buttonGoogleLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("CIS3334", "Google login ");
+                //Log.d("CIS3334", "Google login ");
                 googleSignIn();
             }
         });
 
         buttonSignOut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("CIS3334", "Logging out - signOut ");
+                //Log.d("CIS3334", "Logging out - signOut ");
                 signOut();
             }
         });
@@ -86,59 +86,72 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d("CIS3334", "onAuthStateChanged:signed_in:" + user.getUid());
+                    //Log.d("CIS3334", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
-                    Log.d("CIS3334", "onAuthStateChanged:signed_out");
+                    //Log.d("CIS3334", "onAuthStateChanged:signed_out");
                 }
                 // ...
             }
         };
     }//end of onCreate
     @Override
+    //Start authentication listener
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
     @Override
+    //Stop authentication listener
     public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+    /*
+    Create an account by email and password
+    @param email    the email account to sign in
+    @param password     the password for the account
+    */
     private void createAccount(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("CIS3334", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        //Log.d("CIS3334", "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            textViewStatus.setText("Authentication failed.");
+                            //Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    //Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
                     }
                 });
     }
-
+    //Sign in to the account using email and password
+    /*
+    Let users sign in
+    @param email    the email account to sign in
+    @param password     the password for the account
+    */
     private void signIn(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("CIS3334", "signInWithEmail:onComplete:" + task.isSuccessful());
+                        //Log.d("CIS3334", "signInWithEmail:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w("CIS3334", "signInWithEmail", task.getException());
+                            //Log.w("CIS3334", "signInWithEmail", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -147,7 +160,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    /*
+    Let users sign out
+    */
     private void signOut () {
         mAuth.signOut();
     }
